@@ -23,7 +23,7 @@ const baseConfig = {
                   filename: 'assets/images/[hash][ext]',
                 },
             },
-        
+
         ],
     },
     resolve: {
@@ -47,7 +47,7 @@ const baseConfig = {
         new CopyPlugin({
             patterns: [
               { from: path.resolve(__dirname, './src/assets/img'), to: path.resolve(__dirname, '../dist/assets/img') },
-             { from: path.resolve(__dirname, './src/assets/icons'), to: path.resolve(__dirname, '../dist/assets/icons') },            
+              { from: path.resolve(__dirname, './src/assets/icons'), to: path.resolve(__dirname, '../dist/assets/icons') },
             ],
           }),
     ],

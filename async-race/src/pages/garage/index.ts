@@ -1,28 +1,20 @@
+import './style.css';
 import Page from '../../core/templtes/page';
-import { GARAGE_URL } from '../../urls';
+import CarsList from './components/carsList';
 class Garage extends Page {
     static TextObject = {
         Garage: 'Garage',
     };
+    cars: CarsList;
     constructor(id: string) {
         super(id);
-    }
-
-    async getDefaultCars() {
-        try {
-            const data = await fetch(GARAGE_URL);
-            const cars = await data.json();
-            console.log(cars);
-            return cars;
-        } catch (e) {
-            console.log(e);
-        }
+        this.cars = new CarsList();
     }
 
     render() {
-        const title = this.createHeaderTitle(Garage.TextObject.Garage);
+        const title = this.createHeaderTitle(Garage.TextObject.Garage + CarsList.lengthData);
         this.container.append(title);
-        this.getDefaultCars();
+        this.container.append(this.cars.render());
         return this.container;
     }
 }

@@ -1,10 +1,13 @@
 import { createHTMLElement } from '../../../utils/createHTMLElement';
 import { CarData } from '../../../interfaces/interfaces';
-class CarsListOne {
+import RenderData from './renderData';
+
+class CarsListOne extends RenderData {
     container: HTMLElement;
     carData: CarData;
 
     constructor(carData: CarData) {
+        super();
         this.container = document.createElement('div');
         this.container.classList.add('car-list');
         this.carData = carData;
@@ -19,6 +22,11 @@ class CarsListOne {
         btnChange.innerHTML = 'Change';
         const btnRemove = createHTMLElement('button', ['btn', 'btn-rm']);
         btnRemove.innerHTML = 'Remove';
+        btnRemove.addEventListener('click', async () => {
+            this.removeCar(this.carData.id);
+            this.container.innerHTML = '';
+            RenderData.carsData.pop();
+        });
         carChangeBtns.append(btnChange);
         carChangeBtns.append(btnRemove);
         const carName = createHTMLElement('p', ['car__name']);

@@ -1,7 +1,6 @@
 import CarsListOne from './carsListOne';
 import RenderData from './renderData';
 import { CarData } from '../../../interfaces/interfaces';
-
 class CarsList extends RenderData {
     static lengthData: number;
     container: HTMLElement;
@@ -13,10 +12,10 @@ class CarsList extends RenderData {
     createListCars() {
         const carWrapper = document.createElement('div');
         carWrapper.classList.add('cars-wrapper');
-        this.getDefaultCars().then((cars) => {
-            CarsList.lengthData = cars.length;
-            console.log(CarsList.lengthData);
+        this.getDefaultCars();
+        this.getDefaultCarsPage().then((cars) => {
             cars.forEach((car: CarData) => {
+                console.log(car);
                 const auto = new CarsListOne(car);
                 carWrapper.append(auto.render());
             });

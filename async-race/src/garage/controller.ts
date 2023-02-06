@@ -10,8 +10,11 @@ class Controller {
         this.handleCountCars();
         this.renderPagintions();
         this.renderForms();
+        this.handleBlockCars();
+        this.handleRemoveCar();
     }
 
+    // колличество аавтомобилей
     handleCountCars() {
         this.model.getDefaultCars().then(() => {
             this.view.amountCars(this.model.carData.length);
@@ -27,11 +30,16 @@ class Controller {
         this.view.createPagination();
     }
 
-    /* renderCars() {
-        this.model.getDefaultCars().then((cars) => {
-            console.log(cars);
-            cars.forEach((el: CarData) => this.view.createOneCar(el));
+    // рендер блоков с авто
+    handleBlockCars() {
+        this.model.getDefaultCars().then(() => {
+            this.model.carData.forEach((el: CarData) => this.view.createOneCar(el));
         });
-    }*/
+    }
+
+    // удаление одного автомобиля
+    handleRemoveCar() {
+        this.view.bindRemoveCar();
+    }
 }
 export default Controller;

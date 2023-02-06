@@ -16,10 +16,15 @@ class Model {
         }
     }
 
-    /*async countCars() {
-        const count = await this.getDefaultCars();
-        console.log('fff', count.length);
-        return count.length;
-    }*/
+    async deleteCar(id: number) {
+        try {
+            const data = await fetch(`http://127.0.0.1:3000/garage/${id}`, {
+                method: 'DELETE',
+            });
+            return data;
+        } catch (e) {
+            console.log(e);
+        }
+    }
 }
 export default Model;

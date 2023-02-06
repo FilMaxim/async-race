@@ -105,9 +105,6 @@ class View {
         });
         const btnRemove = this.createElement('button', ['btn', 'btn-danger']);
         btnRemove.innerHTML = 'Remove';
-        /*btnRemove.addEventListener('click', () => {
-            car.remove();
-        });*/
 
         carChangeBtns.append(btnChange);
         carChangeBtns.append(btnRemove);
@@ -142,10 +139,14 @@ class View {
         this.carsWrapper.append(car);
     }
 
-    bindChangeCar() {
-        this.carsWrapper.addEventListener('click', (event) => {
-            console.log(event.target);
-            //this.createImputChange('red', 'red');
+    bindRemoveCar() {
+        this.carsWrapper.addEventListener('click', (event: Event) => {
+            const targets = event.target as HTMLElement;
+            console.log(222);
+
+            if (targets.className === 'btn-danger') {
+                console.log(111);
+            }
         });
     }
 }

@@ -1,1 +1,0 @@
-import Garage from '..';

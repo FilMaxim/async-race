@@ -1,6 +1,5 @@
-import App from './app/index';
 import './global.css';
-
-const app = new App();
-
-app.run();
+import View from './garage/view';
+import Model from './garage/model';
+import Controller from './garage/controller';
+new Controller(new Model(), new View());

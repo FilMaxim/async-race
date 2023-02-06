@@ -1,17 +1,88 @@
-.header div{
+/*Блок и forms*/
+.wrapper-forms {
+  width: 90%;
+  margin: auto;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.change-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  gap: 1rem;
+}
+
+/*Блок пагинация*/
+.wrapper-pagination {
+  width: 90%;
+  margin: auto;
   display: flex;
   justify-content: center;
+  background-color: aquamarine;
+  padding: 15px;
+}
+
+/*Блок с автомобилями*/
+.wrapper-cars {
+  width: 90%;
+  margin: auto;
+}
+
+.car {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background-color: rgba(85, 98, 130, 0.365);
+  padding: 15px;
+}
+
+.car-toolbar {
+  display: flex;
   align-items: center;
-  gap: 2rem;
-  padding: 20px;
+  gap: 1rem;
 }
 
-.btn-header {
-  width: 150px;
-  height: 40px;
-  border-radius: 5px;
-  background-color: rgba(146, 146, 236, 0.644);
-  font-size: 18px;
-
-
+.car-change-btns {
+  display: flex;
+  gap: 15px;
 }
+
+.move-car {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 3px dotted #000;
+}
+
+.move-car__start {
+  display: flex;
+  gap: 1rem;
+}
+
+.move-car__finish {
+  display: flex;
+  align-items: flex-end;
+  margin-right: 5rem;
+}
+
+.move-car__img {
+  display: flex;
+  position: relative;
+  align-items: flex-end;
+  height: 48px;
+  width: 64px;
+}
+
+.move-car__img svg {
+  position: absolute;
+  vertical-align: middle;
+  bottom: -20px;
+  left: 0;
+}
+
+.flag-finish {
+  width: 36px;
+  height: 36px;
+}
+

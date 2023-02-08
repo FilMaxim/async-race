@@ -22,8 +22,8 @@ class Controller {
     }
 
     renderForms() {
-        this.view.createImputCreate();
-        this.view.createImputChange();
+        this.view.createInputCreate();
+        this.view.createInputChange();
     }
 
     renderPagintions() {
@@ -40,6 +40,7 @@ class Controller {
     // удаление одного автомобиля
     handleRemoveCar() {
         this.view.bindRemoveCar();
+        //this.handleBlockCars();
     }
 }
 export default Controller;

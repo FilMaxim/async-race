@@ -17,6 +17,7 @@ class Model {
     }
 
     async deleteCar(id: number) {
+        console.log(111);
         try {
             const data = await fetch(`http://127.0.0.1:3000/garage/${id}`, {
                 method: 'DELETE',

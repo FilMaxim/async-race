@@ -11,9 +11,15 @@ class Controller {
         this.renderPagintions();
         this.renderForms();
         this.handleBlockCars();
-        this.handleRemoveCar();
+        this.view.bindRemoveCar(this.handleRemoveCar); // если это закомитить и раскомитить 15 строку все работает)))
+        //this.view.bindRemoveCar(this.model.deleteCar);
     }
 
+    // удаление одного автомобиля
+    handleRemoveCar(id: number) {
+        console.log('dfdfdf');
+        this.model.deleteCar.bind(this, id)();
+    }
     // колличество аавтомобилей
     handleCountCars() {
         this.model.getDefaultCars().then(() => {
@@ -35,12 +41,6 @@ class Controller {
         this.model.getDefaultCars().then(() => {
             this.model.carData.forEach((el: CarData) => this.view.createOneCar(el));
         });
-    }
-
-    // удаление одного автомобиля
-    handleRemoveCar() {
-        this.view.bindRemoveCar();
-        //this.handleBlockCars();
     }
 }
 export default Controller;

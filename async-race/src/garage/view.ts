@@ -103,9 +103,10 @@ class View {
             this.createInputChange(name, color);
         });
         const btnRemove = this.createElement('button', ['btn', 'btn-danger']);
-        btnRemove.id = String(carData.id);
         btnRemove.textContent = 'Remove';
-
+        /*btnRemove.addEventListener('click', () => {
+            //this.bindRemoveCar();
+        });*/
         carChangeBtns.append(btnChange);
         carChangeBtns.append(btnRemove);
         const carName = this.createElement('p', ['car__name', 'h3']);
@@ -139,12 +140,19 @@ class View {
         this.carsWrapper.append(this.car);
     }
 
-    bindRemoveCar() {
-        if (this.car) {
-            this.car.addEventListener('click', () => {
-                console.log(111);
-            });
-        }
+    bindRemoveCar(handler: { (id: number): void; (arg0: number): void }) {
+        this.carsWrapper.addEventListener('click', (event) => {
+            const targ = event.target as HTMLElement;
+            if (targ.classList.contains('btn-danger')) {
+                const elementCar = targ.parentElement?.parentElement?.parentElement;
+                if (elementCar) {
+                    const id = Number(elementCar.id);
+                    console.log(id, 'id');
+
+                    handler(id);
+                }
+            }
+        });
     }
 }
 export default View;

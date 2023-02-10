@@ -32,7 +32,8 @@ class View {
         this.spanCountCars.textContent = ` ${count}`;
     }
 
-    createInputChange(name = '', color = 'red') {
+    //создание кнопки change
+    createInputUpdate(name = '', color = 'red') {
         const changeWrapp = this.createElement('div', ['change-wrap']);
         //const inputName: HTMLInputElement = this.createElement('input', ['input-name']);
         const inputName = document.createElement('input');
@@ -44,7 +45,7 @@ class View {
         inputColor.type = 'color';
         inputColor.value = color;
         const inputBTN = this.createElement('button', ['btn', 'btn-secondary']);
-        inputBTN.textContent = 'Change';
+        inputBTN.textContent = 'Update';
         changeWrapp.append(inputName, inputColor, inputBTN);
         this.formsWrapper.append(changeWrapp);
     }
@@ -58,7 +59,7 @@ class View {
         const inputColor = document.createElement('input');
         inputColor.classList.add('input-color');
         inputColor.type = 'color';
-        inputColor.value = 'red';
+        inputColor.value = '#ffffff';
         const inputBTN = this.createElement('button', ['btn', 'btn-secondary']);
         inputBTN.textContent = 'Create';
         changeWrapp.append(inputName, inputColor, inputBTN);
@@ -91,12 +92,12 @@ class View {
         const carChangeBtns = this.createElement('div', ['car-change-btns']);
         const btnChange = this.createElement('button', ['btn', 'btn-success']);
         btnChange.textContent = 'Change';
-        btnChange.addEventListener('click', () => {
+        /*btnChange.addEventListener('click', () => {
             const name = 'ggg';
             const color = 'white';
             console.log(name + '=' + color);
             this.createInputChange(name, color);
-        });
+        });*/
         const btnRemove = this.createElement('button', ['btn', 'btn-danger']);
         btnRemove.textContent = 'Remove';
         carChangeBtns.append(btnChange);
@@ -145,8 +146,25 @@ class View {
                 const elementCar = targ.parentElement?.parentElement?.parentElement;
                 if (elementCar) {
                     const id = Number(elementCar.id);
-                    console.log(id, 'id');
                     handler(id);
+                }
+            }
+        });
+    }
+
+    //клик по кнопке Change
+    bindChangeCar(carData: CarData[]) {
+        this.carsWrapper.addEventListener('click', (event) => {
+            const targ = event.target as HTMLElement;
+            if (targ.classList.contains('btn-success')) {
+                const elementCar = targ.parentElement?.parentElement?.parentElement;
+                if (elementCar) {
+                    const id = Number(elementCar.id);
+                    console.log(id, 'id');
+                    const elCar = carData.find((el) => el.id === id);
+                    console.log(elCar);
+                    this.formsWrapper.childNodes[1]?.remove();
+                    this.createInputUpdate(elCar?.name, elCar?.color);
                 }
             }
         });

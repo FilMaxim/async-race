@@ -5,6 +5,7 @@ class Model {
         this.carData = [];
     }
 
+    //получить автомобили
     async getDefaultCars() {
         try {
             const data = await fetch('http://127.0.0.1:3000/garage');
@@ -16,11 +17,31 @@ class Model {
         }
     }
 
+    //удалить автомобиль
     async deleteCar(id: number) {
-        console.log(111);
         try {
             const data = await fetch(`http://127.0.0.1:3000/garage/${id}`, {
                 method: 'DELETE',
+            });
+            return data;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    //изменить автомобиль
+    async changeCar(id: number) {
+        try {
+            const a = {
+                name: 'max',
+                color: '#924d4d',
+            };
+            const data = await fetch(`http://127.0.0.1:3000/garage/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(a),
             });
             return data;
         } catch (e) {

@@ -1,6 +1,5 @@
 import View from './view';
 import Model from './model';
-import { CarData } from './components/interfaces';
 class Controller {
     model: Model;
     view: View;
@@ -11,15 +10,17 @@ class Controller {
         this.renderPagintions();
         this.renderForms();
         this.handleBlockCars();
-        this.view.bindRemoveCar(this.handleRemoveCar); // если это закомитить и раскомитить 15 строку все работает)))
-        //this.view.bindRemoveCar(this.model.deleteCar);
+        this.view.bindRemoveCar(this.handleRemoveCar); //неработает
+        //this.view.bindRemoveCar(this.model.deleteCar); //работает
     }
 
     // удаление одного автомобиля
-    handleRemoveCar(id: number) {
-        console.log('dfdfdf');
-        this.model.deleteCar.bind(this, id)();
-    }
+    handleRemoveCar = (id: number) => {
+        console.log(this);
+        this.model.deleteCar(id);
+        this.handleCountCars();
+        this.handleBlockCars();
+    };
     // колличество аавтомобилей
     handleCountCars() {
         this.model.getDefaultCars().then(() => {
@@ -39,7 +40,7 @@ class Controller {
     // рендер блоков с авто
     handleBlockCars() {
         this.model.getDefaultCars().then(() => {
-            this.model.carData.forEach((el: CarData) => this.view.createOneCar(el));
+            this.view.bindCreateAllCars(this.model.carData);
         });
     }
 }

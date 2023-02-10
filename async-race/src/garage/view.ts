@@ -6,10 +6,13 @@ class View {
     formsWrapper: HTMLElement;
     pagination: HTMLElement;
     car?: HTMLElement;
+    spanCountCars: HTMLElement;
     constructor() {
         this.app = document.querySelector('body');
         this.headerTitle = this.createElement('h1', ['title-main']);
         this.headerTitle.textContent = 'Garage';
+        this.spanCountCars = this.createElement('span', ['count-cars']);
+        this.headerTitle.append(this.spanCountCars);
         this.formsWrapper = this.createElement('div', ['wrapper-forms']);
         this.pagination = this.createElement('div', ['wrapper-pagination']);
         this.carsWrapper = this.createElement('div', ['wrapper-cars']);
@@ -24,10 +27,9 @@ class View {
         return element;
     }
 
+    //cчитать колличество автомобилей
     amountCars(count: number) {
-        const span = this.createElement('span', ['count-cars']);
-        span.textContent = String(count);
-        this.headerTitle.append(span);
+        this.spanCountCars.textContent = ` ${count}`;
     }
 
     createInputChange(name = '', color = 'red') {
@@ -43,11 +45,7 @@ class View {
         inputColor.value = color;
         const inputBTN = this.createElement('button', ['btn', 'btn-secondary']);
         inputBTN.textContent = 'Change';
-
-        changeWrapp.append(inputName);
-        changeWrapp.append(inputColor);
-        changeWrapp.append(inputBTN);
-
+        changeWrapp.append(inputName, inputColor, inputBTN);
         this.formsWrapper.append(changeWrapp);
     }
 
@@ -63,11 +61,7 @@ class View {
         inputColor.value = 'red';
         const inputBTN = this.createElement('button', ['btn', 'btn-secondary']);
         inputBTN.textContent = 'Create';
-
-        changeWrapp.append(inputName);
-        changeWrapp.append(inputColor);
-        changeWrapp.append(inputBTN);
-
+        changeWrapp.append(inputName, inputColor, inputBTN);
         this.formsWrapper.append(changeWrapp);
     }
 
@@ -78,7 +72,7 @@ class View {
         btnNumber1.textContent = '<';
         const spanNumber = document.createElement('span');
         spanNumber.classList.add('page-pagination');
-        spanNumber.textContent = ` Page: 1 of <span>22</span> `;
+        spanNumber.innerHTML = ` Page: 1 of <span>22</span> `;
         const btnNumber2 = document.createElement('button');
         btnNumber2.classList.add('btn-number');
         btnNumber2.textContent = '>';
@@ -88,6 +82,7 @@ class View {
         this.pagination.append(pageNumbers);
     }
 
+    //создание блока одного автомобиля
     createOneCar(carData: CarData) {
         this.car = this.createElement('div', ['car']);
         this.car.id = String(carData.id);
@@ -104,16 +99,12 @@ class View {
         });
         const btnRemove = this.createElement('button', ['btn', 'btn-danger']);
         btnRemove.textContent = 'Remove';
-        /*btnRemove.addEventListener('click', () => {
-            //this.bindRemoveCar();
-        });*/
         carChangeBtns.append(btnChange);
         carChangeBtns.append(btnRemove);
         const carName = this.createElement('p', ['car__name', 'h3']);
         carName.textContent = carData.name;
         carToolBar.append(carChangeBtns);
         carToolBar.append(carName);
-
         const moveCar = this.createElement('div', ['move-car']);
         const moveCarStart = this.createElement('div', ['move-car__start']);
         const moveCarBtns = this.createElement('div', ['move-car__btns']);
@@ -140,6 +131,13 @@ class View {
         this.carsWrapper.append(this.car);
     }
 
+    // рендер всех блоков с автомобилями
+    bindCreateAllCars(allCarSData: CarData[]) {
+        this.carsWrapper.textContent = '';
+        allCarSData.forEach((el: CarData) => this.createOneCar(el));
+    }
+
+    // клик по кнопке Remove - удаление автомобиля
     bindRemoveCar(handler: { (id: number): void; (arg0: number): void }) {
         this.carsWrapper.addEventListener('click', (event) => {
             const targ = event.target as HTMLElement;
@@ -148,7 +146,6 @@ class View {
                 if (elementCar) {
                     const id = Number(elementCar.id);
                     console.log(id, 'id');
-
                     handler(id);
                 }
             }

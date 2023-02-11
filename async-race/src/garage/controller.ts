@@ -12,7 +12,8 @@ class Controller {
         this.handleBlockCars();
         this.view.bindRemoveCar(this.handleRemoveCar); //неработает
         //this.view.bindRemoveCar(this.model.deleteCar); //работает
-        this.handleChangeCar();
+        //this.view.bindUpdateCar(this.model.carData, this.handleUpdateCar);
+        this.handleUpdateCar();
     }
 
     // колличество аавтомобилей
@@ -45,11 +46,11 @@ class Controller {
         this.handleBlockCars();
     };
 
-    ////клик по кнопке Change
-    handleChangeCar = () => {
-        console.log(this.model.carData);
+    // Изменение одного автомобиля
+    handleUpdateCar = () => {
         this.model.getDefaultCars().then((data) => {
-            this.view.bindChangeCar(data);
+            this.view.bindUpdateCar(data, this.model.updateCar);
+            this.handleBlockCars();
         });
     };
 }

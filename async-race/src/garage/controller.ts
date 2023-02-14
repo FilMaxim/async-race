@@ -13,6 +13,7 @@ class Controller {
         this.view.bindRemoveCar(this.handleRemoveCar);
         this.handleUpdateCar();
         this.handleCreateCar();
+        this.handlerCreate100cars();
     }
 
     // колличество аавтомобилей
@@ -25,6 +26,7 @@ class Controller {
     renderForms() {
         this.view.createInputCreate();
         this.view.createInputUpdate();
+        this.view.createRaceResetGenerateBTN();
     }
 
     renderPagintions() {
@@ -57,6 +59,15 @@ class Controller {
     // Создание одного автомобиля
     handleCreateCar = () => {
         this.view.bindCreateCar(this.model.createCar, this.handleBlockCars.bind(this), this.handleCountCars.bind(this));
+    };
+
+    // Cоздание 100 случайных авто
+    handlerCreate100cars = () => {
+        this.view.bindGenerateCars(
+            this.model.create100Cars,
+            this.handleBlockCars.bind(this),
+            this.handleCountCars.bind(this)
+        );
     };
 }
 

@@ -8,9 +8,13 @@ class View {
     car?: HTMLElement;
     spanCountCars: HTMLElement;
     inputColorUpdate: HTMLInputElement | undefined;
-    inputNameUpdate: HTMLInputElement | undefined;
+    inputNameUpdate?: HTMLInputElement;
     inputNameCreate: HTMLInputElement | undefined;
     inputColorCreate: HTMLInputElement | undefined;
+    inputBTNUpdate: HTMLButtonElement | undefined;
+    btnRace: HTMLElement | undefined;
+    btnReset: HTMLElement | undefined;
+    btnGenerateCars: HTMLElement | undefined;
     constructor() {
         this.app = document.querySelector('body');
         this.headerTitle = this.createElement('h1', ['title-main']);
@@ -46,11 +50,11 @@ class View {
         this.inputColorUpdate = this.createElement('input', ['input-color']) as HTMLInputElement;
         this.inputColorUpdate.type = 'color';
         this.inputColorUpdate.value = color;
-        const inputBTN = this.createElement('button', ['btn', 'btn-update', 'btn-secondary']) as HTMLButtonElement;
-        inputBTN.type = 'submit';
-        //inputBTN.disabled = true;
-        inputBTN.textContent = 'Update';
-        changeWrapp.append(this.inputNameUpdate, this.inputColorUpdate, inputBTN);
+        this.inputBTNUpdate = this.createElement('button', ['btn', 'btn-update', 'btn-secondary']) as HTMLButtonElement;
+        this.inputBTNUpdate.type = 'submit';
+        this.inputBTNUpdate.disabled = true;
+        this.inputBTNUpdate.textContent = 'Update';
+        changeWrapp.append(this.inputNameUpdate, this.inputColorUpdate, this.inputBTNUpdate);
         this.formsWrapper.append(changeWrapp);
     }
 
@@ -58,12 +62,10 @@ class View {
     createInputCreate() {
         const changeWrapp = this.createElement('form', ['change-wrap']) as HTMLFormElement;
         changeWrapp.action = '#';
-        this.inputNameCreate = document.createElement('input');
-        this.inputNameCreate.classList.add('input-name');
+        this.inputNameCreate = this.createElement('input', ['input-name']) as HTMLInputElement;
         this.inputNameCreate.type = 'text';
         this.inputNameCreate.placeholder = 'Enter car model';
-        this.inputColorCreate = document.createElement('input');
-        this.inputColorCreate.classList.add('input-color');
+        this.inputColorCreate = this.createElement('input', ['input-color']) as HTMLInputElement;
         this.inputColorCreate.type = 'color';
         this.inputColorCreate.value = '#ffffff';
         const inputBTN = this.createElement('button', ['btn', 'btn-create', 'btn-secondary']) as HTMLButtonElement;
@@ -73,6 +75,22 @@ class View {
         this.formsWrapper.append(changeWrapp);
     }
 
+    //Button Race, Reset and Generate cars
+    createRaceResetGenerateBTN() {
+        const btnsWrap = this.createElement('div', ['btns-wrap']);
+
+        this.btnRace = this.createElement('button', ['btn-Race']);
+        this.btnRace.textContent = 'Race';
+
+        this.btnReset = this.createElement('button', ['btn-Reset']);
+        this.btnReset.textContent = 'Race';
+
+        this.btnGenerateCars = this.createElement('button', ['btn-GenerateCars']);
+        this.btnGenerateCars.textContent = 'Generate cars';
+
+        btnsWrap.append(this.btnRace, this.btnReset, this.btnGenerateCars);
+        this.formsWrapper.append(btnsWrap);
+    }
     createPagination() {
         const pageNumbers = this.createElement('div', ['page-numbers']);
         const btnNumber1 = document.createElement('button');
@@ -165,11 +183,12 @@ class View {
             const targ = event.target as HTMLElement;
             if (targ.classList.contains('btn-success')) {
                 const elementCar = targ.closest('.car');
-                if (elementCar) {
+                if (elementCar && this.inputBTNUpdate && this.inputNameUpdate && this.inputColorUpdate) {
                     id = Number(elementCar.id);
                     const elCar = carData.find((el) => el.id === id);
-                    this.formsWrapper.childNodes[1]?.remove();
-                    this.createInputUpdate(elCar?.name, elCar?.color);
+                    this.inputNameUpdate.value = String(elCar?.name);
+                    this.inputColorUpdate.value = String(elCar?.color);
+                    this.inputBTNUpdate.disabled = false;
                 }
             }
         });
@@ -180,11 +199,15 @@ class View {
                     name: this.inputNameUpdate?.value,
                     color: this.inputColorUpdate?.value,
                 };
+                if (this.inputBTNUpdate) {
+                    this.inputBTNUpdate.disabled = true;
+                }
                 handler(id, updateObj).then(() => func2());
             }
         });
     }
 
+    //создание одного автомобиля
     bindCreateCar(
         handler: {
             (createObj: { name: string | undefined; color: string | undefined }): Promise<Response | undefined>;
@@ -201,6 +224,23 @@ class View {
                     color: this.inputColorCreate?.value,
                 };
                 handler(updateObj).then(() => {
+                    fn2();
+                    fn3();
+                });
+            }
+        });
+    }
+
+    //Generate cars
+    bindGenerateCars(
+        fn1: { (): Promise<Response | undefined>; (): Promise<Response | undefined> },
+        fn2: { (): void },
+        fn3: { (): void }
+    ) {
+        this.btnGenerateCars?.addEventListener('click', () => {
+            console.log('click');
+            for (let i = 0; i < 5; i++) {
+                fn1().then(() => {
                     fn2();
                     fn3();
                 });

@@ -1,8 +1,63 @@
 import { CarData } from './components/interfaces';
 class Model {
     carData: CarData[];
+    autos: string[] = [
+        'Audi',
+        'BMW',
+        'Ford',
+        'Honda',
+        'Hyundai',
+        'Kia',
+        'Tesla',
+        'Mazda',
+        'Buick',
+        'Cadillac',
+        'Chevrolet',
+        'Chrysler',
+        'Dodge',
+        'Ford',
+    ];
+    models: string[] = [
+        'S-TYPE',
+        'R5',
+        'T2',
+        'B1',
+        'E-TRON',
+        'ILX',
+        'INTEGRA',
+        'LEGEND',
+        'MDX',
+        'NSX',
+        'V12 VANTAGE',
+        'VANQUISH',
+        'VIRAGE',
+    ];
     constructor() {
         this.carData = [];
+    }
+
+    //рамдомное число
+    private getRandomNumber(max: number) {
+        const ramdom = Math.floor(Math.random() * max);
+        return ramdom;
+    }
+
+    private getRandomColor() {
+        const ramdomColor = '#' + parseInt(String(Math.random() * 0xffffff)).toString(16);
+        return ramdomColor;
+    }
+
+    // рендер случайного авто
+    private getRamdomCarsModels() {
+        const autosRamdom = this.autos[this.getRandomNumber(this.autos.length)];
+        const modelsRamdom = this.models[this.getRandomNumber(this.models.length)];
+        const nameRamdomCar = `${autosRamdom} ${modelsRamdom}`;
+        const newCar = {
+            name: nameRamdomCar,
+            color: this.getRandomColor(),
+        };
+        console.log(newCar);
+        return newCar;
     }
 
     //получить автомобили
@@ -60,5 +115,23 @@ class Model {
             console.log(e);
         }
     }
+
+    //создать 100 новых авто
+    create100Cars = async () => {
+        try {
+            const datacars = this.getRamdomCarsModels.call(this);
+            const data = await fetch(`http://127.0.0.1:3000/garage/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+
+                body: JSON.stringify(datacars),
+            });
+            return data;
+        } catch (e) {
+            console.log(e);
+        }
+    };
 }
 export default Model;

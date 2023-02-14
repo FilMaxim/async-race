@@ -10,10 +10,9 @@ class Controller {
         this.renderPagintions();
         this.renderForms();
         this.handleBlockCars();
-        this.view.bindRemoveCar(this.handleRemoveCar); //неработает
-        //this.view.bindRemoveCar(this.model.deleteCar); //работает
-        //this.view.bindUpdateCar(this.model.carData, this.handleUpdateCar);
+        this.view.bindRemoveCar(this.handleRemoveCar);
         this.handleUpdateCar();
+        this.handleCreateCar();
     }
 
     // колличество аавтомобилей
@@ -34,8 +33,10 @@ class Controller {
 
     // рендер блоков с авто
     handleBlockCars() {
+        console.log('update block');
         this.model.getDefaultCars().then(() => {
             this.view.bindCreateAllCars(this.model.carData);
+            this.model.carData;
         });
     }
 
@@ -49,9 +50,14 @@ class Controller {
     // Изменение одного автомобиля
     handleUpdateCar = () => {
         this.model.getDefaultCars().then((data) => {
-            this.view.bindUpdateCar(data, this.model.updateCar);
-            this.handleBlockCars();
+            this.view.bindUpdateCar(data, this.model.updateCar, this.handleBlockCars.bind(this));
         });
     };
+
+    // Создание одного автомобиля
+    handleCreateCar = () => {
+        this.view.bindCreateCar(this.model.createCar, this.handleBlockCars.bind(this), this.handleCountCars.bind(this));
+    };
 }
+
 export default Controller;

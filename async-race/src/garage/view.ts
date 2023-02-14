@@ -7,8 +7,10 @@ class View {
     pagination: HTMLElement;
     car?: HTMLElement;
     spanCountCars: HTMLElement;
-    inputColor: HTMLInputElement | undefined;
-    inputName: HTMLInputElement | undefined;
+    inputColorUpdate: HTMLInputElement | undefined;
+    inputNameUpdate: HTMLInputElement | undefined;
+    inputNameCreate: HTMLInputElement | undefined;
+    inputColorCreate: HTMLInputElement | undefined;
     constructor() {
         this.app = document.querySelector('body');
         this.headerTitle = this.createElement('h1', ['title-main']);
@@ -36,36 +38,38 @@ class View {
 
     //создание form Update
     createInputUpdate(name = '', color = 'undefined') {
-        const changeWrapp = this.createElement('div', ['change-wrap']);
-        //const inputName: HTMLInputElement = this.createElement('input', ['input-name']);
-        this.inputName = document.createElement('input');
-        this.inputName.classList.add('input-name');
-        this.inputName.type = 'text';
-        this.inputName.value = name;
-        this.inputColor = document.createElement('input');
-        this.inputColor.classList.add('input-color');
-        this.inputColor.type = 'color';
-        this.inputColor.value = color;
-        const inputBTN = this.createElement('button', ['btn', 'btn-secondary']);
+        const changeWrapp = this.createElement('form', ['change-wrap']) as HTMLFormElement;
+        changeWrapp.action = '#';
+        this.inputNameUpdate = this.createElement('input', ['input-name']) as HTMLInputElement;
+        this.inputNameUpdate.type = 'text';
+        this.inputNameUpdate.value = name;
+        this.inputColorUpdate = this.createElement('input', ['input-color']) as HTMLInputElement;
+        this.inputColorUpdate.type = 'color';
+        this.inputColorUpdate.value = color;
+        const inputBTN = this.createElement('button', ['btn', 'btn-update', 'btn-secondary']) as HTMLButtonElement;
+        inputBTN.type = 'submit';
+        //inputBTN.disabled = true;
         inputBTN.textContent = 'Update';
-        changeWrapp.append(this.inputName, this.inputColor, inputBTN);
+        changeWrapp.append(this.inputNameUpdate, this.inputColorUpdate, inputBTN);
         this.formsWrapper.append(changeWrapp);
     }
 
     //создание form Create
     createInputCreate() {
-        const changeWrapp = this.createElement('div', ['change-wrap']);
-        const inputName = document.createElement('input');
-        inputName.classList.add('input-name');
-        inputName.type = 'text';
-        inputName.placeholder = 'Enter car model';
-        const inputColor = document.createElement('input');
-        inputColor.classList.add('input-color');
-        inputColor.type = 'color';
-        inputColor.value = '#ffffff';
-        const inputBTN = this.createElement('button', ['btn', 'btn-secondary']);
+        const changeWrapp = this.createElement('form', ['change-wrap']) as HTMLFormElement;
+        changeWrapp.action = '#';
+        this.inputNameCreate = document.createElement('input');
+        this.inputNameCreate.classList.add('input-name');
+        this.inputNameCreate.type = 'text';
+        this.inputNameCreate.placeholder = 'Enter car model';
+        this.inputColorCreate = document.createElement('input');
+        this.inputColorCreate.classList.add('input-color');
+        this.inputColorCreate.type = 'color';
+        this.inputColorCreate.value = '#ffffff';
+        const inputBTN = this.createElement('button', ['btn', 'btn-create', 'btn-secondary']) as HTMLButtonElement;
+        inputBTN.type = 'submit';
         inputBTN.textContent = 'Create';
-        changeWrapp.append(inputName, inputColor, inputBTN);
+        changeWrapp.append(this.inputNameCreate, this.inputColorCreate, inputBTN);
         this.formsWrapper.append(changeWrapp);
     }
 
@@ -139,11 +143,8 @@ class View {
         this.carsWrapper.addEventListener('click', (event) => {
             const targ = event.target as HTMLElement;
             if (targ.classList.contains('btn-danger')) {
-                const elementCar = targ.parentElement?.parentElement?.parentElement;
-                if (elementCar) {
-                    const id = Number(elementCar.id);
-                    handler(id);
-                }
+                const elementCar = targ.closest('.car');
+                elementCar ? handler(Number(elementCar.id)) : console.log('not found');
             }
         });
     }
@@ -156,13 +157,14 @@ class View {
                 Response | undefined
             >;
             (arg0: number, arg1: { name: string | undefined; color: string | undefined }): void;
-        }
+        },
+        func2: () => void
     ) {
-        let id = 0;
+        let id: number;
         this.carsWrapper.addEventListener('click', (event) => {
             const targ = event.target as HTMLElement;
             if (targ.classList.contains('btn-success')) {
-                const elementCar = targ.parentElement?.parentElement?.parentElement;
+                const elementCar = targ.closest('.car');
                 if (elementCar) {
                     id = Number(elementCar.id);
                     const elCar = carData.find((el) => el.id === id);
@@ -173,14 +175,35 @@ class View {
         });
         this.formsWrapper.addEventListener('click', async (event) => {
             const targ = event.target as HTMLElement;
-            if (targ.classList.contains('btn-secondary')) {
+            if (targ.classList.contains('btn-update')) {
                 const updateObj = {
-                    name: this.inputName?.value,
-                    color: this.inputColor?.value,
+                    name: this.inputNameUpdate?.value,
+                    color: this.inputColorUpdate?.value,
                 };
-                await handler(id, updateObj);
-                this.formsWrapper.childNodes[1]?.remove();
-                this.createInputUpdate();
+                handler(id, updateObj).then(() => func2());
+            }
+        });
+    }
+
+    bindCreateCar(
+        handler: {
+            (createObj: { name: string | undefined; color: string | undefined }): Promise<Response | undefined>;
+            (arg0: { name: string | undefined; color: string | undefined }): void;
+        },
+        fn2: { (): void },
+        fn3: { (): void }
+    ) {
+        this.formsWrapper.addEventListener('click', async (event) => {
+            const targ = event.target as HTMLElement;
+            if (targ.classList.contains('btn-create')) {
+                const updateObj = {
+                    name: this.inputNameCreate?.value,
+                    color: this.inputColorCreate?.value,
+                };
+                handler(updateObj).then(() => {
+                    fn2();
+                    fn3();
+                });
             }
         });
     }

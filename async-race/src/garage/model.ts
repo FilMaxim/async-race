@@ -11,7 +11,6 @@ class Model {
             const data = await fetch('http://127.0.0.1:3000/garage');
             const cars = await data.json();
             this.carData = cars;
-            console.log(this);
             return cars;
         } catch (e) {
             console.log(e);
@@ -24,8 +23,6 @@ class Model {
             const data = await fetch(`http://127.0.0.1:3000/garage/${id}`, {
                 method: 'DELETE',
             });
-            await this.getDefaultCars();
-            console.log(this.carData);
             return data;
         } catch (e) {
             console.log(e);
@@ -42,7 +39,22 @@ class Model {
                 },
                 body: JSON.stringify(updateObj),
             });
-            await this.getDefaultCars();
+            return data;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    //создать новый автомобиль
+    async createCar(createObj: { name: string | undefined; color: string | undefined }) {
+        try {
+            const data = await fetch(`http://127.0.0.1:3000/garage/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(createObj),
+            });
             return data;
         } catch (e) {
             console.log(e);

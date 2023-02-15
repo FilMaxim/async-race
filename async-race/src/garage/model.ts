@@ -1,6 +1,5 @@
 import { CarData } from './components/interfaces';
 class Model {
-    carData: CarData[];
     autos: string[] = [
         'Audi',
         'BMW',
@@ -32,8 +31,15 @@ class Model {
         'VANQUISH',
         'VIRAGE',
     ];
+
+    carData: CarData[];
+    limit: number;
+    countPages: number;
+
     constructor() {
         this.carData = [];
+        this.limit = 7;
+        this.countPages = 1;
     }
 
     //рамдомное число
@@ -56,14 +62,26 @@ class Model {
             name: nameRamdomCar,
             color: this.getRandomColor(),
         };
-        console.log(newCar);
         return newCar;
     }
 
     //получить автомобили
-    async getDefaultCars() {
+    async getDefaultCarsCount() {
         try {
             const data = await fetch('http://127.0.0.1:3000/garage');
+            const cars = await data.json();
+            this.countPages = await Math.ceil(cars.length / this.limit);
+            return cars;
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    //получить автомобили
+    async getDefaultCars(page: number) {
+        try {
+            const garage = 'http://127.0.0.1:3000/garage';
+            const data = await fetch(`${garage}?_limit=${this.limit}&_page=${page}`);
             const cars = await data.json();
             this.carData = cars;
             return cars;

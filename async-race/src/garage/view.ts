@@ -15,6 +15,7 @@ class View {
     btnRace: HTMLElement | undefined;
     btnReset: HTMLElement | undefined;
     btnGenerateCars: HTMLElement | undefined;
+    pageCurrent: number;
     constructor() {
         this.app = document.querySelector('body');
         this.headerTitle = this.createElement('h1', ['title-main']);
@@ -27,8 +28,10 @@ class View {
         if (this.app) {
             this.app.append(this.headerTitle, this.formsWrapper, this.pagination, this.carsWrapper);
         }
+        this.pageCurrent = 1;
     }
 
+    // создание нового элемента (утилита);
     createElement(tag: string, className: string[]) {
         const element = document.createElement(tag);
         if (className) element.classList.add(...className);
@@ -83,7 +86,7 @@ class View {
         this.btnRace.textContent = 'Race';
 
         this.btnReset = this.createElement('button', ['btn-Reset']);
-        this.btnReset.textContent = 'Race';
+        this.btnReset.textContent = 'Reset';
 
         this.btnGenerateCars = this.createElement('button', ['btn-GenerateCars']);
         this.btnGenerateCars.textContent = 'Generate cars';
@@ -91,20 +94,36 @@ class View {
         btnsWrap.append(this.btnRace, this.btnReset, this.btnGenerateCars);
         this.formsWrapper.append(btnsWrap);
     }
-    createPagination() {
+
+    //создание пагинации
+    createPagination(countPages: number, handler: { (page: number): void }) {
+        this.pagination.textContent = '';
         const pageNumbers = this.createElement('div', ['page-numbers']);
-        const btnNumber1 = document.createElement('button');
-        btnNumber1.classList.add('btn-number');
+        const btnNumber1 = this.createElement('button', ['btn-number']) as HTMLButtonElement;
         btnNumber1.textContent = '<';
-        const spanNumber = document.createElement('span');
-        spanNumber.classList.add('page-pagination');
-        spanNumber.innerHTML = ` Page: 1 of <span>22</span> `;
-        const btnNumber2 = document.createElement('button');
-        btnNumber2.classList.add('btn-number');
+        if (this.pageCurrent === 1) btnNumber1.disabled = true;
+        btnNumber1.addEventListener('click', () => {
+            if (this.pageCurrent > 1) {
+                spanNumber.innerHTML = ` Page: ${--this.pageCurrent} of ${countPages} `;
+                btnNumber2.disabled = false;
+                if (this.pageCurrent === 1) btnNumber1.disabled = true;
+                handler(this.pageCurrent);
+            }
+        });
+        const spanNumber = this.createElement('span', ['page-pagination']);
+        spanNumber.innerHTML = ` Page: ${this.pageCurrent} of ${countPages} `;
+        const btnNumber2 = this.createElement('button', ['btn-number']) as HTMLButtonElement;
         btnNumber2.textContent = '>';
-        pageNumbers.append(btnNumber1);
-        pageNumbers.append(spanNumber);
-        pageNumbers.append(btnNumber2);
+        if (this.pageCurrent === countPages) btnNumber2.disabled = true;
+        btnNumber2.addEventListener('click', () => {
+            if (this.pageCurrent < countPages) {
+                spanNumber.innerHTML = ` Page: ${++this.pageCurrent} of ${countPages} `;
+                btnNumber1.disabled = false;
+                if (this.pageCurrent === countPages) btnNumber2.disabled = true;
+                handler(this.pageCurrent);
+            }
+        });
+        pageNumbers.append(btnNumber1, spanNumber, btnNumber2);
         this.pagination.append(pageNumbers);
     }
 
@@ -167,7 +186,7 @@ class View {
         });
     }
 
-    //клик по кнопке Change
+    //клик по кнопке Change и Create
     bindUpdateCar(
         carData: CarData[],
         handler: {
@@ -199,9 +218,12 @@ class View {
                     name: this.inputNameUpdate?.value,
                     color: this.inputColorUpdate?.value,
                 };
-                if (this.inputBTNUpdate) {
+                if (this.inputBTNUpdate && this.inputNameUpdate && this.inputColorUpdate) {
                     this.inputBTNUpdate.disabled = true;
+                    this.inputNameUpdate.value = '';
+                    this.inputColorUpdate.value = 'undefined';
                 }
+
                 handler(id, updateObj).then(() => func2());
             }
         });
@@ -237,9 +259,9 @@ class View {
         fn2: { (): void },
         fn3: { (): void }
     ) {
+        const countGenerateCars = 5;
         this.btnGenerateCars?.addEventListener('click', () => {
-            console.log('click');
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < countGenerateCars; i++) {
                 fn1().then(() => {
                     fn2();
                     fn3();

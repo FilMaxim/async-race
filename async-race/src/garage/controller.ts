@@ -7,7 +7,7 @@ class Controller {
         this.model = model;
         this.view = view;
         this.handleCountCars();
-        this.renderPagintions();
+        //this.renderPagintions();
         this.renderForms();
         this.handleBlockCars();
         this.view.bindRemoveCar(this.handleRemoveCar);
@@ -16,10 +16,15 @@ class Controller {
         this.handlerCreate100cars();
     }
 
-    // колличество аавтомобилей
+    // колличество автомобилей
     handleCountCars() {
-        this.model.getDefaultCars().then(() => {
-            this.view.amountCars(this.model.carData.length);
+        this.model.getDefaultCarsCount().then((data) => {
+            if (this.view.pageCurrent > this.model.countPages) {
+                this.view.pageCurrent = this.model.countPages;
+                this.handleBlockCars();
+            }
+            this.view.amountCars(data.length);
+            this.view.createPagination(this.model.countPages, this.handleBlockCars);
         });
     }
 
@@ -29,29 +34,32 @@ class Controller {
         this.view.createRaceResetGenerateBTN();
     }
 
-    renderPagintions() {
-        this.view.createPagination();
-    }
+    // пагинация
+    renderPagintions = () => {
+        this.model.getDefaultCarsCount().then((data) => {
+            return this.view.createPagination(data.length, this.handleBlockCars);
+        });
+    };
 
     // рендер блоков с авто
-    handleBlockCars() {
-        console.log('update block');
-        this.model.getDefaultCars().then(() => {
+    handleBlockCars = () => {
+        this.model.getDefaultCars(this.view.pageCurrent).then(() => {
             this.view.bindCreateAllCars(this.model.carData);
             this.model.carData;
         });
-    }
+    };
 
     // удаление одного автомобиля
     handleRemoveCar = (id: number) => {
-        this.model.deleteCar(id);
-        this.handleCountCars();
-        this.handleBlockCars();
+        this.model.deleteCar(id).then(() => {
+            this.handleCountCars();
+            this.handleBlockCars();
+        });
     };
 
     // Изменение одного автомобиля
     handleUpdateCar = () => {
-        this.model.getDefaultCars().then((data) => {
+        this.model.getDefaultCars(this.view.pageCurrent).then((data) => {
             this.view.bindUpdateCar(data, this.model.updateCar, this.handleBlockCars.bind(this));
         });
     };

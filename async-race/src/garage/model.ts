@@ -70,7 +70,7 @@ class Model {
         try {
             const data = await fetch('http://127.0.0.1:3000/garage');
             const cars = await data.json();
-            this.countPages = await Math.ceil(cars.length / this.limit);
+            this.countPages = Math.ceil(cars.length / this.limit);
             return cars;
         } catch (e) {
             console.log(e);

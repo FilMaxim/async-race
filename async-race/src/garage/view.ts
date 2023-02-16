@@ -279,10 +279,19 @@ class View {
             const targ = event.target as HTMLElement;
             if (targ.classList.contains('btn-start')) {
                 const elementCar = targ.closest('.car');
-                if (elementCar) {
+                const elementSVG = elementCar?.querySelector('.move-car__img') as HTMLElement;
+                console.log(elementSVG);
+                elementSVG.style.left = 0 + '%';
+                if (elementCar && elementSVG) {
                     id = Number(elementCar.id);
                     console.log(id);
                     handler(id);
+                    setInterval(() => {
+                        /*if (elementSVG.style.left === 800 + '%') {
+                            clearInterval(animations);
+                        }*/
+                        elementSVG.style.left += 100 + '%';
+                    }, 20);
                 }
             }
         });
@@ -304,5 +313,7 @@ class View {
             }
         });*/
     }
+
+    // анимация
 }
 export default View;

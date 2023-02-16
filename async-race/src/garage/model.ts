@@ -151,5 +151,41 @@ class Model {
             console.log(e);
         }
     };
+
+    //Запуск-остановка двигателя
+    engineStartStop = async (id: number) => {
+        try {
+            const response = await fetch(`http://127.0.0.1:3000/engine/?id=${id}&status=started`, {
+                method: 'PATCH',
+            });
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+                await this.switchEngineDrive(id);
+
+                return data;
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    };
+
+    //двигатель автомобиля в режим движения
+    switchEngineDrive = async (id: number) => {
+        try {
+            const response = await fetch(`http://127.0.0.1:3000/engine/?id=${id}&status=drive`, {
+                method: 'PATCH',
+            });
+            console.log(response);
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+
+                return data;
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    };
 }
 export default Model;

@@ -1,3 +1,22 @@
+body {
+  background-image:  url(./assets/img/race.jpg);
+}
+h1 {
+  background-color: rgb(41, 87, 128);
+  padding: 10px;
+  text-align: center;
+}
+.btn {
+  background-color: #6357efdc;
+  border: 2px solid #000000;
+  color: rgb(0, 0, 0);
+}
+
+.btn:hover {
+  color: wheat;
+  background-color: #6357efdc;
+}
+
 /*Блок и forms*/
 .wrapper-forms {
   width: 90%;
@@ -18,7 +37,11 @@
   display: flex;
   align-items: center;
   justify-content: start;
-  gap: 15px;
+  gap: 10px;
+}
+
+.btn-change, .btn-remove, .btn-start, .btn-reset {
+  width: 80px;
 }
 
 /*Блок пагинация*/
@@ -27,7 +50,8 @@
   margin: auto;
   display: flex;
   justify-content: center;
-  background-color: aquamarine;
+  background-color: rgba(183, 186, 195, 0.781);
+  border-bottom: 2px solid #000;
   padding: 15px;
 }
 
@@ -39,21 +63,29 @@
 
 .car {
   display: flex;
-  flex-direction: column;
+  width: 100%;
   gap: 0.5rem;
-  background-color: rgba(85, 98, 130, 0.365);
+  background-color: rgba(183, 186, 195, 0.7);
   padding: 15px;
 }
 
 .car-toolbar {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 5px;
 }
 
-.car-change-btns {
+.car-change-remove-btns, .car-start-reset-btns {
   display: flex;
-  gap: 15px;
+  gap: 5px;
+}
+
+.wrap-name-move {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding-left: 10px;
 }
 
 .move-car {
@@ -79,13 +111,14 @@
   align-items: flex-end;
   height: 48px;
   width: 64px;
+  left: 500%;
 }
 
 .move-car__img svg {
   position: absolute;
   vertical-align: middle;
   bottom: -20px;
-  left: 0;
+  left: 0px;
 }
 
 .flag-finish {

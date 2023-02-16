@@ -14,6 +14,8 @@ class Controller {
         this.handleUpdateCar();
         this.handleCreateCar();
         this.handlerCreate100cars();
+
+        this.view.bindStartResetCar(this.model.engineStartStop);
     }
 
     // колличество автомобилей
